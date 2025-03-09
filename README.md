@@ -1,6 +1,6 @@
 <div align="center">
   <h1>🐜 angent</h1>
-  <p><strong>Educational Multi-Agent Scaffold</strong></p>
+  <p><strong>Educational Multi-Agent Scaffold( 🚧Still in Development🚧)</strong></p>
   <p>
     <a href="https://pypi.org/project/angent/" > 
     	<img src="https://img.shields.io/badge/python->=3.11-blue">
@@ -13,27 +13,15 @@
 
 
 
+
 ## Features
 
-- **Async**: If your agents are async, then the whole workflow is async. Based on [drive-flow](https://github.com/memodb-io/drive-flow)
-- **Small**: `angent` is less than 300 LOC.
+- **Small**: `angent` will be less than 1000 LOC.
+- **MCP Agent in one line**: Check [examples](./examples)
 - **Plan-then-Execute**: `angent` will gather your agents, make the plans and then assign the correct jobs to your agents
 
 
 
 ## QuickStart
 
-### Install
-
-```bash
-pip install angent
-```
-
-### Define your Agent
-
-```python
-from angent import BaseAgent
-
-class 
-```
-
+TODO
