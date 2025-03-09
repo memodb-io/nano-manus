@@ -29,7 +29,7 @@ async def main():
         await ready()
         print(
             await file_agent.handle(
-                "Goto /projects/examples, and write a hello_world.txt with content: 'Angent is here!'"
+                "Go to /projects/examples, and write a hello_world.txt with content: 'Angent is here!'"
             )
         )
     finally:

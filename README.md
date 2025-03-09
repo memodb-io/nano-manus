@@ -24,4 +24,12 @@
 
 ## QuickStart
 
-TODO
+#### Run a MCP agent
+
+```bash
+uv sync
+uv run examples/file_agent_demo.py
+```
+
+This agent will write `Angent is here` to the file `./examples/hello_world.txt`
+
