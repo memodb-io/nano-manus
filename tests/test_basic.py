@@ -1,5 +1,5 @@
 import pytest
-from angent.types import BaseAgent
+from nano_manus.types import BaseAgent
 
 
 def test_init():

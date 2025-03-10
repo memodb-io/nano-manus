@@ -12,8 +12,6 @@ class MCPClient:
     This class manages the connection and communication with the SQLite database through MCP.
     """
 
-    VOLUMN_PATH = "/tmp/angent_mcp"
-
     @classmethod
     def from_official(
         cls,

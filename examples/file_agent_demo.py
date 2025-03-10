@@ -1,8 +1,8 @@
 import os
 import asyncio
-from angent.env import CONSOLE
-from angent.prebuilt.mcp import MCPAgent
-from angent.prebuilt.planner import Planner
+from nano_manus.env import CONSOLE
+from nano_manus.prebuilt.mcp import MCPAgent
+from nano_manus.prebuilt.planner import Planner
 
 local_dir = os.path.dirname(os.path.abspath(__file__))
 dir_name = os.path.basename(local_dir)
@@ -29,7 +29,7 @@ async def main():
         await ready()
         print(
             await file_agent.handle(
-                "Go to /projects/examples, and write a hello_world.txt with content: 'Angent is here!'"
+                "Go to /projects/examples, and write a hello_world.txt with content: 'nano_manus is here!'"
             )
         )
     finally:

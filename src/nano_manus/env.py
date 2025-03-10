@@ -4,7 +4,7 @@ from openai import AsyncOpenAI
 from openai.types.chat import ChatCompletion
 from dataclasses import dataclass
 
-LOG = logging.getLogger("angent")
+LOG = logging.getLogger("nano_manus")
 CONSOLE = Console()
 async_openai_client = None
 
