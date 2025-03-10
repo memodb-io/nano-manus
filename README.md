@@ -1,6 +1,7 @@
 <div align="center">
   <h1>🐜 nano_manus</h1>
-  <p><strong>Educational Multi-Agent Scaffold( 🚧Still in Development🚧)</strong></p>
+  <p><strong>Implementing some features of Manus with MCP</strong></p>
+    <p><strong>🚧 Still in Development 🚧</strong></p>
   <p>
     <a href="https://pypi.org/project/nano_manus/" > 
     	<img src="https://img.shields.io/badge/python->=3.11-blue">
@@ -10,6 +11,7 @@
     </a>
   </p>
 </div>
+
 
 
 
