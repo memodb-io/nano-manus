@@ -1,26 +1,19 @@
-from ..types import BaseAgent
+from .type import BaseWorker
 from ..env import CONFIG, llm_complete
 
-PROMPT = """
-You are {name}
-{description}
 
-Now, complete the task based on the above instructions.
-"""
-
-
-class GeneralAgent(BaseAgent):
+class NoToolWorker(BaseWorker):
     def __init__(self, name: str, description: str):
         self.__name = name
         self.__description = description
+        self.prompt = f"You're a {self.__name}, {self.__description}"
 
     @property
     def name(self) -> str:
         return self.__name
 
-    @property
-    def description(self) -> str:
-        return self.__description
+    async def hint(self) -> str:
+        return f"I'm a {self.__name}, {self.__description}"
 
     async def handle(self, instruction: str, global_ctx: dict) -> str:
         response = await llm_complete(
@@ -28,9 +21,7 @@ class GeneralAgent(BaseAgent):
             messages=[
                 {
                     "role": "system",
-                    "content": PROMPT.format(
-                        name=self.name, description=self.description
-                    ),
+                    "content": self.prompt,
                 },
                 {"role": "user", "content": instruction},
             ],

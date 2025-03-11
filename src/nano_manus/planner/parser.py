@@ -1,7 +1,27 @@
 import re
-from ...env import CONSOLE
+from ..env import CONSOLE
 
-CODE_BLOCK_PATTERN = re.compile(r"```(.*?)```", re.DOTALL)
+CODE_BLOCK_PATTERN = re.compile(r"```tasks(.*?)```", re.DOTALL)
+GOAL_BLOCK_PATTERN = re.compile(r"^(.*?)```tasks", re.DOTALL)
+
+
+def parse_step(step: str) -> dict:
+    code_blocks = CODE_BLOCK_PATTERN.findall(step)
+    goal_blocks = GOAL_BLOCK_PATTERN.findall(step)
+    if not len(goal_blocks):
+        CONSOLE.log("!Missing goal in this step")
+        goal = ""
+    else:
+        goal = goal_blocks[0].strip()
+    if not len(code_blocks):
+        CONSOLE.log("!Missing subtasks in this step")
+        return goal, []
+    else:
+        subtasks = code_blocks[0].strip()
+        subtasks = [l.strip() for l in subtasks.split("\n") if l.startswith("- ")]
+        expressions = [parse_subtask_expression(st[2:]) for st in subtasks]
+        expressions = [e for e in expressions if e is not None]
+    return goal, expressions
 
 
 def parse_steps(steps: str) -> list[dict]:

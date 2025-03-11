@@ -1,3 +1,4 @@
+import os
 import logging
 from rich.console import Console
 from openai import AsyncOpenAI
@@ -31,8 +32,16 @@ async def llm_complete(model: str, messages: list[dict], **kwargs) -> ChatComple
 
 @dataclass
 class Config:
-    prebuilt_general_model: str = "gpt-4o-mini"
+    prebuilt_general_model: str = "gpt-4o"
     prebuilt_plan_model: str = "gpt-4o"
+
+    use_dir: str = "/home"
+    allowed_local_dir: str = None
+
+    def __post_init__(self):
+        if self.allowed_local_dir is None:
+            self.allowed_local_dir = os.getcwd()
+        CONSOLE.print(f"Allowed local dir: {self.allowed_local_dir}")
 
 
 CONFIG = Config()
