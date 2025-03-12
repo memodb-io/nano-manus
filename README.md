@@ -71,6 +71,7 @@ uv run examples/basic_planner.py
 - [x] Search Web (`mcp/brave-search`, `jina-ai-mcp-server`)
 - [x] Local files operations (`@wonderwhy-er/desktop-commander`)
 - [x] Execute codes and commands in your computer (`@wonderwhy-er/desktop-commander`)
+- [ ] (coming soon) Implementing [CodeAct](https://github.com/xingyaoww/code-act)
 - [ ] (coming soon) Read `.pdf, .doc`
 - [ ] (coming soon) browser use
 - [ ] (coming soon) multi-model router (`claude`, `qwen`, `deepseek`...)
