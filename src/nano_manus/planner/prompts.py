@@ -68,6 +68,8 @@ Above is the list of available agents, you can choose one or more agents to perf
 ## Notes
 - If you find the previous results is wrong or not useful, you can re-plan the task with same result_id.
 - You should decide if you have enough agents to perform the task, if not, you should ask the user to add more agents.
+- Make sure you give enough context to the agents in TASK_DESCRIPTION, you ```tasks block is the only way to communicate with other agents.
+- If you have finished the task, you need to answer the user's question and restate some result if needed.
 
 Now, understand the task in user input, and plan the task into a list of steps based on the above instructions:
 """

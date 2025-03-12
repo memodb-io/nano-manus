@@ -7,10 +7,24 @@ PROMPT = """{system}
  
 # Tools
 {tools}
- 
+
+# Planning step by step 
+Before you start to call functions, you should always plan step by step and explain your plan in a concise way.
+
 # Notes  
-- Ensure responses are based on the latest information available from function calls.
 - Always highlight the potential of available tools to assist users comprehensively.
+- If you're unable to complete the task, state your reasons and encountered problems clearly.
+
+## Recap
+After callings are done and the task is completed, you should always summary why/what tools your called in a concise way after your response to the instruction.
+For example:
+```
+// before is your response
+## Recap
+1. I used `search_web` to first search the latest weather in SF
+2. Then I used `convert_to_csv` to convert the data into csv format
+...
+```
 """
 
 
@@ -22,6 +36,14 @@ class BaseMCPAgent(BaseWorker):
         return "You are a helpful assistant capable of accessing external functions."
 
     async def handle(self, instruction: str, global_ctx: dict = {}) -> str:
+        CONSOLE.print(f"🤖 {self.name} is solving:", instruction)
+        additional_context = {
+            r: c for r, c in global_ctx.get("results", {}).items() if r in instruction
+        }
+        if additional_context:
+            CONSOLE.print(
+                f"🤖 {self.name}: I will use previouse results", additional_context
+            )
         hints = [await m.hint() for m in self.__mcps]
         tool_schemas = []
         for m in self.__mcps:
@@ -34,7 +56,6 @@ class BaseMCPAgent(BaseWorker):
         system_prompt = PROMPT.format(
             system=self.overwrite_system(), tools="\n".join(hints)
         )
-
         messages = [
             {
                 "role": "system",
@@ -57,22 +78,31 @@ class BaseMCPAgent(BaseWorker):
                     tool_args = tool_call.function.arguments
                     if isinstance(tool_args, str):
                         tool_args = json.loads(tool_args)
-                    CONSOLE.log(f"Tool call: {tool_name} with args: {tool_args}")
+                    CONSOLE.log(f"🔧 {self.name} is using {tool_name}")
 
                     actual_tool = find_tools[tool_name]
                     tool_result = await actual_tool(**tool_args)
-                    CONSOLE.log(f"Tool result: {tool_result}")
+                    # CONSOLE.log(f"🔧 Tool result: {tool_result}")
                     tool_results.append(
                         {
                             "role": "tool",
                             "tool_call_id": tool_call.id,
                             "name": tool_call.function.name,
-                            "content": json.dumps(tool_result),
+                            "content": json.dumps(tool_result)[
+                                : CONFIG.maximum_tool_result_length
+                            ],
                         }
                     )
                 messages.extend(tool_results)
                 continue
             else:
+                CONSOLE.print(
+                    f"🤖 {self.name} is done:",
+                    response.choices[0].message.content[
+                        : CONFIG.maximum_tool_result_showing_length
+                    ]
+                    + "...",
+                )
                 return response.choices[0].message.content
 
     async def hint(self) -> str:

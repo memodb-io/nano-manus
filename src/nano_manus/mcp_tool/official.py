@@ -21,7 +21,7 @@ class MCPOfficial(BaseMCP):
             command="npx",
             args=["-y", "@smithery/cli@latest", "run", pkg_name, *suffix_args],
         )
-        CONSOLE.log(f"Load MCP: {pkg_name} from smithery")
+        CONSOLE.log(f"Use MCP: {pkg_name} from smithery")
         return cls(pkg_name, server_params)
 
     @classmethod
@@ -32,7 +32,7 @@ class MCPOfficial(BaseMCP):
             command="npx",
             args=[*prefix_args, pkg_name, *suffix_args],
         )
-        CONSOLE.log(f"Load MCP: {pkg_name} from npx")
+        CONSOLE.log(f"Use MCP: {pkg_name} from npx")
         return cls(pkg_name, server_params)
 
     @classmethod
@@ -55,7 +55,7 @@ class MCPOfficial(BaseMCP):
             ],
             env=docker_env,
         )
-        CONSOLE.log(f"Load MCP: {image_name} from docker")
+        CONSOLE.log(f"Use MCP: {image_name} from docker")
         return cls(image_name, server_params)
 
     def __init__(self, name: str, server_params: StdioServerParameters):
@@ -79,45 +79,45 @@ class MCPOfficial(BaseMCP):
     async def __aexit__(self, exc_type, exc_value, traceback):
         await self.disconnect()
 
-    async def connect(self):
+    async def connect(self, exit_stack: AsyncExitStack):
         if self._connected:
             return
 
         CONSOLE.log(f"Connect to MCP: {self.name}")
 
         # Create an AsyncExitStack to properly manage all async context managers
-        self._exit_stack = AsyncExitStack()
+        # self._exit_stack = AsyncExitStack()
 
         # Use the exit stack to enter the stdio_client context
         # This ensures proper cleanup when we exit the stack
         client_ctx = stdio_client(self.server_params)
-        self.read, self.write = await self._exit_stack.enter_async_context(client_ctx)
+        self.read, self.write = await exit_stack.enter_async_context(client_ctx)
 
         # Create and enter the session context
         session_ctx = ClientSession(self.read, self.write)
-        self.session = await self._exit_stack.enter_async_context(session_ctx)
+        self.session = await exit_stack.enter_async_context(session_ctx)
 
         # Initialize the session
         await self.session.initialize()
         self._connected = True
 
-    async def disconnect(self):
-        if not self._connected or not self._exit_stack:
-            return
-        # Use the exit stack to properly clean up all contexts
-        try:
-            await self._exit_stack.aclose()
-        except Exception as e:
-            CONSOLE.log(f"Error during disconnect for {self.name}: {e}")
+    # async def disconnect(self):
+    #     if not self._connected or not self._exit_stack:
+    #         return
+    #     # Use the exit stack to properly clean up all contexts
+    #     try:
+    #         await self._exit_stack.aclose()
+    #     except Exception as e:
+    #         CONSOLE.log(f"Error during disconnect for {self.name}: {e}")
 
-        # Clear all references
-        self.session = None
-        self.read = None
-        self.write = None
-        self._exit_stack = None
-        self._connected = False
+    #     # Clear all references
+    #     self.session = None
+    #     self.read = None
+    #     self.write = None
+    #     self._exit_stack = None
+    #     self._connected = False
 
-        CONSOLE.log(f"Disconnected from {self.name}")
+    #     CONSOLE.log(f"Disconnected from {self.name}")
 
     async def get_available_tools(self) -> List[Tool]:
         if not self.session:

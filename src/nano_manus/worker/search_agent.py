@@ -5,7 +5,14 @@ from .mcp_agent import BaseMCPAgent
 
 class SearchAgent(BaseMCPAgent):
     def __init__(self):
-        super().__init__(["search_web"])
+        super().__init__(["search_web", "read_webpage"])
+
+    def overwrite_system(self):
+        return """
+You're a search agent. You're able to search the web and read webpages.
+You need to search the web based on the user's instruction.
+Pick the most informative and relevant results from the search and read their full content using read_webpage tool.
+"""
 
     @property
     def name(self) -> str:

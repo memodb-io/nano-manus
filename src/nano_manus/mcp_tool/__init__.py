@@ -7,19 +7,6 @@ from .pool import MCPPool
 
 TOOLS = MCPPool()
 
-
-TOOLS.add_mcp_client(
-    "local_file",
-    MCPOfficial.from_docker(
-        "mcp/filesystem",
-        volume_mounts=[
-            "--mount",
-            f"type=bind,src={CONFIG.allowed_local_dir},dst={CONFIG.use_dir}",
-        ],
-        docker_args=[CONFIG.use_dir],
-    ),
-)
-
 if os.getenv("BRAVE_API_KEY"):
     TOOLS.add_mcp_client(
         "search_web",
@@ -36,14 +23,25 @@ else:
         "[red][Warning] BRAVE_API_KEY is not set, search_web tool will not be available[/red]"
     )
 
-TOOLS.add_mcp_client(
-    "thinking",
-    MCPOfficial.from_npx(
-        "@modelcontextprotocol/server-sequential-thinking",
-        prefix_args=["-y"],
-    ),
-)
-
+if os.getenv("JINA_API_KEY"):
+    TOOLS.add_mcp_client(
+        "read_webpage",
+        MCPOfficial.from_smithery(
+            "jina-ai-mcp-server",
+            suffix_args=[
+                "--config",
+                json.dumps(
+                    {
+                        "jinaApiKey": os.getenv("JINA_API_KEY"),
+                    }
+                ),
+            ],
+        ),
+    )
+else:
+    CONSOLE.print(
+        "[red][Warning] JINA_API_KEY is not set, jina tool will not be available[/red]"
+    )
 # if os.getenv("OPENROUTER_API_KEY"):
 #     TOOLS.add_mcp_client(
 #         "browser",
@@ -64,13 +62,13 @@ TOOLS.add_mcp_client(
 #         "[red][Warning] OPENROUTER_API_KEY is not set, broswer tool will not be available[/red]"
 #     )
 
-# TOOLS.add_mcp_client(
-#     "terminal",
-#     MCPOfficial.from_smithery(
-#         "@wonderwhy-er/desktop-commander",
-#         suffix_args=[
-#             "--config",
-#             "{}",
-#         ],
-#     ),
-# )
+TOOLS.add_mcp_client(
+    "terminal",
+    MCPOfficial.from_smithery(
+        "@wonderwhy-er/desktop-commander",
+        suffix_args=[
+            "--config",
+            "{}",
+        ],
+    ),
+)

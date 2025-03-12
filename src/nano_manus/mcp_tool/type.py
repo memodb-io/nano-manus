@@ -1,17 +1,13 @@
 from typing import List, Callable, Awaitable
 from mcp import Tool
 from abc import ABC, abstractmethod
+from contextlib import AsyncExitStack
 
 
 class BaseMCP(ABC):
     @abstractmethod
-    async def connect(self):
+    async def connect(self, exit_stack: AsyncExitStack):
         """Establishes connection to MCP server"""
-        pass
-
-    @abstractmethod
-    async def disconnect(self):
-        """Disconnects from MCP server"""
         pass
 
     @property

@@ -17,7 +17,6 @@ if __name__ == "__main__":
     result = asyncio.run(
         wp.handle(
             "Search the web information for the last 30 days' weather, and save it to DB",
-            {},
         )
     )
     print(result)
