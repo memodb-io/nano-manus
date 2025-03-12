@@ -31,7 +31,8 @@
 
 ## User Cases
 
-[Check the demo video](./examples/imgs/nano-manus.mp4)
+https://github.com/user-attachments/assets/33b90afc-2e30-4ab0-8988-bd7d6da065fb
+
 
 - `Find all .py file and explain them to me `
 - `Give me the latest weather in SF in last 7 days and save it to csv`
