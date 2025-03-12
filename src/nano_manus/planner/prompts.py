@@ -85,5 +85,9 @@ Above is the list of available agents, you can choose one or more agents to perf
 - If you want to agent to use the previous results, make sure you told the agent about the RESULT_ID you need them to use in TASK_DESCRIPTION
 - If you have finished the task, you need to answer the user's question and restate some result if needed.
 
+## MUST
+- The available agents don't remember the previous results, so you need to tell them the RESULT_ID you need them to use in TASK_DESCRIPTION everytime you like them to use the previous results.
+- You will never repeat the results in your task assign, always use RESULT_ID instead to cite the previous result context.
+
 Now, understand the task in user input, and plan the task into a list of steps based on the above instructions:
 """

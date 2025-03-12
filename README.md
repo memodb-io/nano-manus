@@ -29,7 +29,7 @@
 
 
 
-## User Cases
+## Use Cases
 
 https://github.com/user-attachments/assets/33b90afc-2e30-4ab0-8988-bd7d6da065fb
 
@@ -37,13 +37,18 @@ https://github.com/user-attachments/assets/33b90afc-2e30-4ab0-8988-bd7d6da065fb
 - `Find all .py file and explain them to me `
 - `Give me the latest weather in SF in last 7 days and save it to csv`
 
-> Welcome to give more user cases!
+> Welcome to give more use cases!
 
 
 
 ## QuickStart
 
 #### Setup
+
+- Install [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- Install [docker](https://docs.docker.com/engine/install/)
+
+#### Env
 
 - [Brave Search API key](https://brave.com/search/api/)
 - [Jina API key](https://jina.ai/)

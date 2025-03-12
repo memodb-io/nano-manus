@@ -1,5 +1,6 @@
 import json
 from .type import BaseWorker
+from time import time
 from ..mcp_tool import TOOLS
 from ..env import CONFIG, CONSOLE, llm_complete
 
@@ -40,6 +41,7 @@ class BaseMCPAgent(BaseWorker):
         return "You are a helpful assistant capable of accessing external functions."
 
     async def handle(self, instruction: str, global_ctx: dict = {}) -> str:
+        start = time()
         CONSOLE.print(f"🤖 {self.name} is solving:", instruction)
         additional_context = {
             r: c for r, c in global_ctx.get("results", {}).items() if r in instruction
@@ -77,8 +79,11 @@ class BaseMCPAgent(BaseWorker):
                 model=CONFIG.prebuilt_general_model,
                 messages=messages,
                 tools=tool_schemas,
-                temperature=0.1,
             )
+            if response.choices[0].message.content:
+                CONSOLE.print(
+                    f"🤖 {self.name} is thinking: {response.choices[0].message.content}"
+                )
             messages.append(response.choices[0].message)
             if response.choices[0].message.tool_calls is not None:
                 tool_results = []
@@ -105,13 +110,7 @@ class BaseMCPAgent(BaseWorker):
                 messages.extend(tool_results)
                 continue
             else:
-                CONSOLE.print(
-                    f"🤖 {self.name} is done:",
-                    response.choices[0].message.content[
-                        : CONFIG.maximum_tool_result_showing_length
-                    ]
-                    + "...",
-                )
+                CONSOLE.print(f"🤖 {self.name} is done in {time()-start:.1f}s")
                 return response.choices[0].message.content
 
     async def hint(self) -> str:

@@ -26,8 +26,8 @@ def get_async_openai_client() -> AsyncOpenAI:
 
 async def llm_complete(model: str, messages: list[dict], **kwargs) -> ChatCompletion:
     client = get_async_openai_client()
-    if "temperature" not in kwargs:
-        kwargs["temperature"] = 0.1
+    # if "temperature" not in kwargs:
+    #     kwargs["temperature"] = 0.1
     response = await client.chat.completions.create(
         model=model, messages=messages, **kwargs
     )
@@ -36,14 +36,17 @@ async def llm_complete(model: str, messages: list[dict], **kwargs) -> ChatComple
 
 @dataclass
 class Config:
-    prebuilt_general_model: str = "gpt-4o"
-    prebuilt_plan_model: str = "gpt-4o"
+    prebuilt_general_model: str = "o3-mini"
+    prebuilt_plan_model: str = "o3-mini"
 
     use_dir: str = "/home"
     allowed_local_dir: str = None
 
     maximum_tool_result_length: int = 10000
     maximum_tool_result_showing_length: int = 200
+
+    platform: str = "macOS"
+    pkg_manager: str = "brew"
 
     def __post_init__(self):
         if self.allowed_local_dir is None:
