@@ -11,6 +11,7 @@ class Planner:
     def __init__(
         self, max_steps: int = 30, max_tasks: int = 60, workers: list[BaseWorker] = []
     ):
+
         self.__workers: list[BaseWorker] = workers
         self.__max_steps = max_steps
         self.__max_tasks = max_tasks

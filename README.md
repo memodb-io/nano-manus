@@ -31,7 +31,14 @@
 
 ## User Cases
 
-- `Find all .py file and explain them to me`
+<div align="center">
+		  <video width="80%" controls>
+            <source src="./examples/imgs/nano-manus.mp4" type="video/mp4">
+        </video>
+  <p>nano-manus demo video</p>
+</div>
+
+- `Find all .py file and explain them to me `
 - `Give me the latest weather in SF in last 7 days and save it to csv`
 
 > Welcome to give more user cases!
@@ -70,6 +77,7 @@ uv run examples/basic_planner.py
 - [x] Execute codes and commands in your computer (`@wonderwhy-er/desktop-commander`)
 - [ ] (coming soon) Read `.pdf, .doc`
 - [ ] (coming soon) browser use
+- [ ] (coming soon) multi-model router (`claude`, `qwen`, `deepseek`...)
 
 
 
@@ -77,5 +85,6 @@ uv run examples/basic_planner.py
 
 ## Known Issues
 
+- `nano-manus` is extremely unstable! My guess is `gpt-4o` is not that good at tool use.
 - `Unable to exit`: seem like some MCPs will cause the problems of unable to exit the program when all the tasks were done.
 - `nano-manus` will operate files and run command **on the current dir of your local computer**, make sure you don't run it on some important folders.

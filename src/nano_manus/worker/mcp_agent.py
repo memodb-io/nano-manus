@@ -8,6 +8,10 @@ PROMPT = """{system}
 # Tools
 {tools}
 
+# Additional Context
+Below is the additional context you may need to understand the user's instruction.
+{additional_context}
+
 # Planning step by step 
 Before you start to call functions, you should always plan step by step and explain your plan in a concise way.
 
@@ -44,6 +48,9 @@ class BaseMCPAgent(BaseWorker):
             CONSOLE.print(
                 f"🤖 {self.name}: I will use previouse results", additional_context
             )
+        additional_context_string = "\n".join(
+            [f"- {k}: {v}" for k, v in additional_context.items()]
+        )
         hints = [await m.hint() for m in self.__mcps]
         tool_schemas = []
         for m in self.__mcps:
@@ -54,7 +61,9 @@ class BaseMCPAgent(BaseWorker):
                 find_tools[tool.name] = m.call_tool(tool.name)
 
         system_prompt = PROMPT.format(
-            system=self.overwrite_system(), tools="\n".join(hints)
+            system=self.overwrite_system(),
+            tools="\n".join(hints),
+            additional_context=additional_context_string,
         )
         messages = [
             {

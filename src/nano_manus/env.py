@@ -26,6 +26,8 @@ def get_async_openai_client() -> AsyncOpenAI:
 
 async def llm_complete(model: str, messages: list[dict], **kwargs) -> ChatCompletion:
     client = get_async_openai_client()
+    if "temperature" not in kwargs:
+        kwargs["temperature"] = 0.1
     response = await client.chat.completions.create(
         model=model, messages=messages, **kwargs
     )

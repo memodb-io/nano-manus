@@ -1,8 +1,8 @@
 import re
-from ..env import CONSOLE
 
-CODE_BLOCK_PATTERN = re.compile(r"```tasks(.*?)```", re.DOTALL)
-GOAL_BLOCK_PATTERN = re.compile(r"^(.*?)```tasks", re.DOTALL)
+CODE_BLOCK_PATTERN = re.compile(r"<tasks>(.*?)</tasks>", re.DOTALL)
+TASK_BLOCK_PATTERN = re.compile(r"<subtask>(.*?)</subtask>", re.DOTALL)
+GOAL_BLOCK_PATTERN = re.compile(r"^(.*?)<tasks>", re.DOTALL)
 
 
 def parse_step(step: str) -> dict:
@@ -18,8 +18,8 @@ def parse_step(step: str) -> dict:
         return goal, []
     else:
         subtasks = code_blocks[0].strip()
-        subtasks = [l.strip() for l in subtasks.split("\n") if l.startswith("- ")]
-        expressions = [parse_subtask_expression(st[2:]) for st in subtasks]
+        subtask_blocks = TASK_BLOCK_PATTERN.findall(subtasks)
+        expressions = [parse_subtask_expression(st.strip()) for st in subtask_blocks]
         expressions = [e for e in expressions if e is not None]
     return goal, expressions
 
@@ -29,7 +29,11 @@ def parse_subtask_expression(subtask: str) -> dict:
     subtask = subtask.strip()
 
     # Split by '=' to separate result name and the rest
-    result_name, expression = [x.strip() for x in subtask.split("=")]
+    parts = subtask.split("=")
+    result_name, expression = (
+        parts[0].strip(),
+        "=".join(parts[1:]).strip(),
+    )
 
     # Extract agent_id and param from subtask(agent_id, "param")
     # Remove 'subtask(' from start and ')' from end
@@ -44,3 +48,23 @@ def parse_subtask_expression(subtask: str) -> dict:
     param = param.strip("\"'")
 
     return {"result_name": result_name, "agent_id": agent_id, "param": param}
+
+
+if __name__ == "__main__":
+    print(
+        parse_step(
+            """
+### Step 3: Write a Python script to load the CSV file.
+
+Sub-goal: Use the Terminal Agent to create a Python file that loads and prints the content of the `sf_weather.csv` file.
+
+<tasks>
+<subtask>
+result_31 = subtask(agent_1, "Create a Python file named 'load_sf_weather.py' with the following content:\n\n```\nimport csv\n\nwith open('sf_weather.csv', 'r') as file:\n    reader = csv.reader(file)\n    for row in reader:\n        print(', '.join(row))\n```\n")
+</subtask>
+</tasks>
+
+Please let me know once this step is completed or if there are any issues.
+"""
+        )
+    )
