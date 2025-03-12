@@ -31,17 +31,7 @@
 
 ## User Cases
 
-<div align="center">
-		  <video width="80%" controls>
-            <source src="https://github.com/memodb-io/nano-manus/releases/download/v0.0.3/nano-manus.mp4" type="video/mp4">
-        </video>
-  <p>nano-manus demo video</p>
-</div>
-
-https://github.com/user-attachments/assets/2a2a825d-39ea-45c5-9ba1-f9d58efbc372
-
-
-
+[Check the demo video](./examples/imgs/nano-manus.mp4)
 
 - `Find all .py file and explain them to me `
 - `Give me the latest weather in SF in last 7 days and save it to csv`
