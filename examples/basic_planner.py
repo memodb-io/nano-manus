@@ -1,6 +1,9 @@
+import os
 import dotenv
 
 dotenv.load_dotenv()
+import argparse
+from nano_manus.env import CONFIG, CONSOLE
 from nano_manus.planner import Planner
 from nano_manus.mcp_tool import TOOLS
 from nano_manus.worker import SearchAgent, TerminalAgent
@@ -13,7 +16,15 @@ code_agent = CodeAgent()
 planner = Planner(workers=[search_agent, terminal_agent, code_agent])
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--path", type=str, default="./tmp/agent_run")
+    return parser.parse_args()
+
+
 async def main():
+    args = parse_args()
+    CONFIG.allowed_local_dir = os.path.abspath(args.path)
     await TOOLS.start()
     # result = await planner.handle("Give me the latest weather in Tokyo today")
     await planner.outer_loop()

@@ -1,3 +1,4 @@
+import os
 import re
 import json
 from rich.markdown import Markdown
@@ -36,6 +37,12 @@ class Planner:
 
     async def outer_loop(self):
         CONSOLE.print(LOGO)
+        CONSOLE.print(f"Allowed local dir: {CONFIG.allowed_local_dir}")
+        if not os.path.exists(CONFIG.allowed_local_dir):
+            CONSOLE.print(
+                f"[red]The allowed local dir {CONFIG.allowed_local_dir} does not exist, will create one[/red]"
+            )
+            os.makedirs(CONFIG.allowed_local_dir, exist_ok=True)
         agent_hints = "# Available Agents\n"
         for w in self.__workers:
             agent_hints += f"## {w.name}\n"

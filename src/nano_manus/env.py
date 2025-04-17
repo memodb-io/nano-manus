@@ -36,10 +36,10 @@ async def llm_complete(model: str, messages: list[dict], **kwargs) -> ChatComple
 
 @dataclass
 class Config:
-    prebuilt_general_model: str = "o3-mini"
-    prebuilt_plan_model: str = "o3-mini"
+    prebuilt_general_model: str = "o4-mini"
+    prebuilt_plan_model: str = "o4-mini"
 
-    use_dir: str = "/home"
+    # use_dir: str = "/home"
     allowed_local_dir: str = None
 
     maximum_tool_result_length: int = 10000
@@ -51,7 +51,6 @@ class Config:
     def __post_init__(self):
         if self.allowed_local_dir is None:
             self.allowed_local_dir = os.getcwd()
-        CONSOLE.print(f"Allowed local dir: {self.allowed_local_dir}")
 
 
 CONFIG = Config()
